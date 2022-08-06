@@ -18,12 +18,10 @@ class Login extends Component {
       const { name, email } = this.state;
       if (name && email) {
         return false;
-      }
-      return true;
+      } return true;
     }
 
     handleGame = () => {
-      console.log(this.props);
       const { getApi, history } = this.props;
       getApi();
       history.push('/game');
