@@ -19,7 +19,6 @@ verificaUrlApi = () => {
 
 render() {
   const { stateApi } = this.props;
-  console.log(stateApi.results);
   return (
     <header>
       {!stateApi ? ('Carregando...') : this.verificaUrlApi() }
@@ -55,6 +54,7 @@ render() {
   );
 }
 }
+
 const mapDispatchToProps = (dispatch) => ({
   getApi: () => dispatch(getApiLogin()),
 });

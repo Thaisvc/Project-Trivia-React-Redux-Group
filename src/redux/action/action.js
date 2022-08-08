@@ -1,6 +1,6 @@
 export const REQUEST_API = 'REQUEST_API';
 export const requestApi = (data) => ({
-  type: 'REQUEST_API',
+  type: REQUEST_API,
   data,
 });
 
