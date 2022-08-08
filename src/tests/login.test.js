@@ -6,10 +6,7 @@ import userEvent from '@testing-library/user-event'
 import App from '../App'
 // const service = require("./helpers")
 
-
 describe('Testa funcionamento do componente Login', () => {
- 
-    
     it('Teste se input de name está na tela', () => {
         renderWithRouterAndRedux(<Login />)
   const inputName = screen.getByTestId('input-player-name')
@@ -34,14 +31,11 @@ describe('Testa funcionamento do componente Login', () => {
   expect(buttonPlay).toBeDisabled()
 
     })
-
     it('Teste se começa na rota `/`', () => {
         const { history } = renderWithRouterAndRedux(<Login />)
   expect(history.location.pathname).toBe('/')
-
     })
-
-
+    
     it('A rota deve ser mudada para Game após o clique no botão.', () => {
         const { history } = renderWithRouterAndRedux(<App />, '/');
         const email = screen.getByTestId('input-gravatar-email');
@@ -59,8 +53,8 @@ describe('Testa funcionamento do componente Login', () => {
         const button = screen.getByText(/Settings/i);
         userEvent.click(button);
         expect(history.location.pathname).toBe('/settings');
-     
+
     });
 
 })
-  
+
