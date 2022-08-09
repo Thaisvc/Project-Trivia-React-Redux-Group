@@ -11,13 +11,13 @@ export const loginPeople = (login) => ({
   login,
 });
 
-export const getApiLogin = () => async (dispatch) => {
+export const getApiLogin = (token) => async (dispatch) => {
   try {
-    const response = await fetch('https://opentdb.com/api_token.php?command=request');
-    const data = await response.json();
-    localStorage.setItem('token', data.token);
-    const tokenLocalStorage = localStorage.getItem('token');
-    const newResponse = await fetch(`https://opentdb.com/api.php?amount=5&token=${tokenLocalStorage}`);
+    // const response = await fetch('https://opentdb.com/api_token.php?command=request');
+    // const data = await response.json();
+    // localStorage.setItem('token', data.token);
+
+    const newResponse = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
     const newData = await newResponse.json();
     dispatch(requestApi(newData));
   } catch (error) {

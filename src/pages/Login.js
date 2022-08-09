@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getApiLogin, loginPeople } from '../redux/action/action';
+import { loginPeople } from '../redux/action/action';
 
 class Login extends Component {
     state={
@@ -23,9 +23,11 @@ class Login extends Component {
     }
 
     handleGame = async () => {
-      const { getApi, history } = this.props;
-      await getApi();
-      const { login } = this.props;
+      const { login, history } = this.props;
+      const response = await fetch('https://opentdb.com/api_token.php?command=request');
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+
       await login(this.state);
       history.push('/game');
     }
@@ -83,7 +85,6 @@ class Login extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getApi: () => dispatch(getApiLogin()),
   login: (name) => dispatch(loginPeople(name)),
 });
 

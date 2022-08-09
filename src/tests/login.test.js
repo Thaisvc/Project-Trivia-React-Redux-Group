@@ -36,7 +36,7 @@ describe('Testa funcionamento do componente Login', () => {
   expect(history.location.pathname).toBe('/')
     })
     
-    it('A rota deve ser mudada para Game após o clique no botão.', () => {
+    it('A rota deve ser mudada para Game após o clique no botão.', async () => {
         const { history } = renderWithRouterAndRedux(<App />, '/');
         const email = screen.getByTestId('input-gravatar-email');
         const name = screen.getByTestId('input-player-name');
@@ -44,6 +44,7 @@ describe('Testa funcionamento do componente Login', () => {
         userEvent.type(email, 'enzo@enzo');
         userEvent.type(name, 'enzo');
         userEvent.click(button);
+        await new Promise((r) => setTimeout(r , 2000));
         expect(history.location.pathname).toBe('/game');
      
     });
@@ -53,7 +54,6 @@ describe('Testa funcionamento do componente Login', () => {
         const button = screen.getByText(/Settings/i);
         userEvent.click(button);
         expect(history.location.pathname).toBe('/settings');
-
     });
 
 })

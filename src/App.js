@@ -8,15 +8,15 @@ import './App.css';
 
 export default function App() {
   return (
-    <div className="App">
-      {/* <header className="App-header">
-        <img src={ logo } className="App-logo" alt="logo" />
-      </header> */}
-      <Switch>
-        <Route path="/" exact component={ Login } />
-        <Route path="/game" component={ Game } />
-        <Route path="/settings" component={ Settings } />
-      </Switch>
-    </div>
+    // <div className="App">
+    //   <header className="App-header">
+    //     <img src={ logo } className="App-logo" alt="logo" width={100px} />
+    //   </header>
+    <Switch>
+      <Route path="/" exact component={ Login } />
+      <Route path="/game" component={ Game } />
+      <Route path="/settings" component={ Settings } />
+    </Switch>
+    // </div>
   );
 }
