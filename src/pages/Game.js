@@ -19,11 +19,13 @@ verificaUrlApi = () => {
 
 render() {
   const { stateApi } = this.props;
+
   return (
     <header>
       {!stateApi ? ('Carregando...') : this.verificaUrlApi() }
       {stateApi.results ? (
         <div>
+
           <h1 data-testid="header-player-name">Nome da pessoa</h1>
           <p data-testid="header-score">Placar: 0</p>
           <img
@@ -31,23 +33,26 @@ render() {
             src="https://www.gravatar.com/avatar/c19ad9dbaf91c5533605fbf985177ccc"
             alt="gravatar"
           />
-          {stateApi.results.map((element) => (
-            <div key={ element }>
-              <p data-testid="question-category">{element.category}</p>
-              <p data-testid="question-text">{element.question}</p>
-              {element.incorrect_answers.map((question, index) => (
-                <div key={ question } data-testid="answer-options">
-                  <button type="button" data-testid="correct-answer">
-                    {element.correct_answer}
-                  </button>
-                  <button type="button" data-testid={ `wrong-answer-${index}` }>
-                    {question}
-                  </button>
-                </div>
-              ))}
 
+          <div>
+            <p data-testid="question-category">{stateApi.results[0].category}</p>
+            <p data-testid="question-text">{stateApi.results[0].question}</p>
+            <div>
+              <button type="button" data-testid="correct-answer">
+                {stateApi.results[0].correct_answer}
+              </button>
             </div>
-          ))}
+            {stateApi.results[0].incorrect_answers.map((question, index) => (
+              <div key={ question } data-testid="answer-options">
+
+                <button type="button" data-testid={ `wrong-answer-${index}` }>
+                  {question}
+                </button>
+              </div>
+            ))}
+
+          </div>
+
         </div>
       ) : null}
     </header>
