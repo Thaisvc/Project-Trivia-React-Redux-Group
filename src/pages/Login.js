@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getApiLogin, loginPeople } from '../redux/action/action';
+import { loginPeople } from '../redux/action/action';
 
 class Login extends Component {
     state={
@@ -85,7 +85,6 @@ class Login extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getApi: () => dispatch(getApiLogin()),
   login: (name) => dispatch(loginPeople(name)),
 });
 

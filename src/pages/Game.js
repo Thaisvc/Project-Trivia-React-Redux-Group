@@ -13,12 +13,9 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    const { getApi, stateApi } = this.props;
+    const { getApi } = this.props;
     const tokenLocalStorage = localStorage.getItem('token');
     getApi(tokenLocalStorage);
-    console.log(stateApi);
-    const ERROR_API = 3;
-    if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
   }
 
   componentWillUnmount() {
@@ -55,9 +52,11 @@ class Game extends Component {
   render() {
     const { index } = this.state;
     const { stateApi } = this.props;
+    const ERROR_API = 3;
+    if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
     return (
       <header>
-        {stateApi !== undefined
+        {stateApi
         && (
           <div>
             <h1 data-testid="header-player-name">Nome da pessoa</h1>
