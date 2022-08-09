@@ -37,7 +37,7 @@ class Game extends Component {
     const numRandom = (Math.random() * LENGTH_INCORRECT).toFixed(0);
     // console.log(LENGTH_INCORRECT);
     incorrectAnswers.splice(numRandom, 0, correctAnswer);
-    this.randomQuest(incorrectAnswers);
+    // this.randomQuest(incorrectAnswers);
   }
 
   /*  randomQuest = (incorrectAnswers) => {
@@ -69,13 +69,13 @@ class Game extends Component {
             <p data-testid="question-category">{category}</p>
             <p data-testid="question-text">{question}</p>
             <div />
+            <button type="button" data-testid="correct-answer">
+              {correctAnswer}
+            </button>
             {incorrectAnswers.map((questions, index) => (
               <div key={ questions } data-testid="answer-options">
                 <button type="button" data-testid={ `wrong-answer-${index}` }>
                   {questions}
-                </button>
-                <button type="button" data-testid="correct-answer">
-                  {correctAnswer}
                 </button>
               </div>
             ))}
