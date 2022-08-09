@@ -13,6 +13,9 @@ class Game extends Component {
   }
 
   componentDidMount() {
+    const duration = 60 * 0.50; // Converter para segundos
+    const display = document.querySelector('#timer'); // selecionando o timer
+    this.startTimer(duration, display); // iniciando o timer
     const { getApi } = this.props;
     const tokenLocalStorage = localStorage.getItem('token');
     getApi(tokenLocalStorage);
@@ -49,14 +52,31 @@ class Game extends Component {
     ));
   }
 
-  render() {
-    const { index } = this.state;
-    const { stateApi } = this.props;
-    const ERROR_API = 3;
-    if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
-    return (
-      <header>
-        {stateApi
+   startTimer = (duration, display) => {
+     let timer = duration; let seconds;
+     const min = 60;
+     const sec = 10;
+     const total = 1000;
+     setInterval(() => {
+       // minutes = parseInt(timer / 60, 10);
+       seconds = parseInt(timer % min, 10);
+       // minutes = minutes < 10 ? `0${minutes}` : minutes;
+       seconds = seconds < sec ? `0${seconds}` : seconds;
+       display.textContent = `${seconds}`;
+       if (--timer < 0) {
+         timer = duration;
+       }
+     }, total);
+   }
+
+   render() {
+     const { index } = this.state;
+     const { stateApi } = this.props;
+     const ERROR_API = 3;
+     if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
+     return (
+       <header>
+         {stateApi
         && (
           <div>
             <h1 data-testid="header-player-name">Nome da pessoa</h1>
@@ -82,13 +102,13 @@ class Game extends Component {
 
               <div />
               {stateApi.results && this.renderAnswer()}
-
+              <div id="timer" />
             </div>
           </div>
         )}
-      </header>
-    );
-  }
+       </header>
+     );
+   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
