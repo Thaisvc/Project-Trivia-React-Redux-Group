@@ -23,9 +23,11 @@ class Login extends Component {
     }
 
     handleGame = async () => {
-      const { getApi, history } = this.props;
-      await getApi();
-      const { login } = this.props;
+      const { login, history } = this.props;
+      const response = await fetch('https://opentdb.com/api_token.php?command=request');
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+
       await login(this.state);
       history.push('/game');
     }

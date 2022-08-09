@@ -53,7 +53,6 @@ describe('Testa funcionamento do componente Login', () => {
         const button = screen.getByText(/Settings/i);
         userEvent.click(button);
         expect(history.location.pathname).toBe('/settings');
-
     });
 
 })

@@ -1,11 +1,13 @@
 import { REQUEST_API, LOGIN } from '../action/action';
 
 const INITIAL_STATE = {
-  tokenReturn: '',
+  tokenReturn: {},
+
   name: '',
   assertions: '',
   score: '',
   gravatarEmail: '',
+
 };
 
 const loginReducer = (state = INITIAL_STATE, action) => {

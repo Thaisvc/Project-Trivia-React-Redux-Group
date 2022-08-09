@@ -1,96 +1,100 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// import { Redirect } from 'react-router-dom';
-import { getApiLogin } from '../redux/action/action';
+import { Redirect } from 'react-router-dom';
+import { getApiLogin, requestApi } from '../redux/action/action';
 
 class Game extends Component {
   constructor() {
     super();
     this.state = {
-      category: '',
-      correctAnswer: '',
-      incorrectAnswers: [],
-      question: '',
-
+      index: 0,
     };
   }
 
   componentDidMount() {
-    const { stateApi, history } = this.props;
-    // console.log(stateApi.results);
-    if (stateApi.results.length > 0) {
-      this.setState({
-        category: stateApi.results[0].category,
-        correctAnswer: stateApi.results[0].correct_answer,
-        incorrectAnswers: stateApi.results[0].incorrect_answers,
-        question: stateApi.results[0].question,
-      });
-    } else {
-      history.push('/');
-    }
+    const { getApi, stateApi } = this.props;
+    const tokenLocalStorage = localStorage.getItem('token');
+    getApi(tokenLocalStorage);
+    console.log(stateApi);
+    const ERROR_API = 3;
+    if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
   }
 
-  componentDidUpdate() {
-    const { correctAnswer, incorrectAnswers } = this.state;
-    const LENGTH_INCORRECT = incorrectAnswers.length;
+  componentWillUnmount() {
+    const { delApi } = this.props;
+    delApi({ response_code: 0 });
+  }
+
+  renderAnswer = () => {
+    const { stateApi } = this.props;
+    const { index } = this.state;
+
+    const LENGTH_INCORRECT = stateApi.results[index].incorrect_answers.length;
     const numRandom = (Math.random() * LENGTH_INCORRECT).toFixed(0);
-    // console.log(LENGTH_INCORRECT);
-    incorrectAnswers.splice(numRandom, 0, correctAnswer);
-    // this.randomQuest(incorrectAnswers);
-  }
+    console.log(stateApi.results[index].correct_answer, '<= RESPOSTA CORRETA');
 
-  /*  randomQuest = (incorrectAnswers) => {
-    const { correctAnswer } = this.state;
-  } */
-  // const allAnswers = incorrectAnswers.push([]);
-  // console.log(incorrectAnswers, 'antes do SPLICE');
-  /* this.setState({
-      incorrectAnswers,
-    }); */
+    const answer = [...stateApi.results[index].incorrect_answers];
+    answer.splice(numRandom, 0, stateApi.results[index].correct_answer);
+
+    return answer.map((questions, i) => (
+      <div key={ questions } data-testid="answer-options">
+        {questions === stateApi.results[0].correct_answer
+          ? (
+            <button type="button" data-testid="correct-answer">
+              {stateApi.results[0].correct_answer}
+            </button>)
+          : (
+            <button type="button" data-testid={ `wrong-answer-${i}` }>
+              {questions}
+            </button>)}
+      </div>
+    ));
+  }
 
   render() {
-    // const { stateApi } = this.props;
-    const { category, question, incorrectAnswers, correctAnswer } = this.state;
-    // console.log(category, correctAanswer, incorrectAnswers, question, api);
-
+    const { index } = this.state;
+    const { stateApi } = this.props;
     return (
       <header>
-        <div>
-          <h1 data-testid="header-player-name">Nome da pessoa</h1>
-          <p data-testid="header-score">Placar: 0</p>
-          <img
-            data-testid="header-profile-picture"
-            src="https://www.gravatar.com/avatar/c19ad9dbaf91c5533605fbf985177ccc"
-            alt="gravatar"
-          />
-
+        {stateApi !== undefined
+        && (
           <div>
-            <p data-testid="question-category">{category}</p>
-            <p data-testid="question-text">{question}</p>
-            <div />
-            <button type="button" data-testid="correct-answer">
-              {correctAnswer}
-            </button>
-            {incorrectAnswers.map((questions, index) => (
-              <div key={ questions } data-testid="answer-options">
-                <button type="button" data-testid={ `wrong-answer-${index}` }>
-                  {questions}
-                </button>
-              </div>
-            ))}
+            <h1 data-testid="header-player-name">Nome da pessoa</h1>
+            <p data-testid="header-score">Placar: 0</p>
+            <img
+              data-testid="header-profile-picture"
+              src="https://www.gravatar.com/avatar/c19ad9dbaf91c5533605fbf985177ccc"
+              alt="gravatar"
+            />
+            <div>
+              { stateApi.results !== undefined
+                ? (
+                  <>
+                    <p
+                      data-testid="question-category"
+                    >
+                      {stateApi.results[index].category}
+                    </p>
+                    <p data-testid="question-text">{stateApi.results[index].question}</p>
+                  </>
+                )
+                : <p>Carregando</p>}
+
+              <div />
+              {stateApi.results && this.renderAnswer()}
+
+            </div>
           </div>
-
-        </div>
-        {/* {this.randomQuest()} */}
-
+        )}
       </header>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getApi: () => dispatch(getApiLogin()),
+  getApi: (payload) => dispatch(getApiLogin(payload)),
+  delApi: (obj) => dispatch(requestApi(obj)),
 });
 
 const mapStateToProps = (state) => ({
