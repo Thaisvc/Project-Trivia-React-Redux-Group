@@ -40,9 +40,9 @@ class Game extends Component {
     this.randomQuest(incorrectAnswers);
   }
 
-  randomQuest = (incorrectAnswers) => {
+  /*  randomQuest = (incorrectAnswers) => {
     const { correctAnswer } = this.state;
-  }
+  } */
   // const allAnswers = incorrectAnswers.push([]);
   // console.log(incorrectAnswers, 'antes do SPLICE');
   /* this.setState({
