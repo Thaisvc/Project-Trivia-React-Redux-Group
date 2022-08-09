@@ -23,6 +23,18 @@ class Game extends Component {
     delApi({ response_code: 0 });
   }
 
+  selectAnswer= ({ target }) => {
+    const elementCorreta = document.getElementById('correta');
+    const elementIncorreta = document.getElementById('incorreta');
+    if (target.id === 'correta') {
+      elementCorreta.style.border = '3px solid rgb(6, 240, 15)';
+      elementIncorreta.style.border = '3px solid red';
+    } else {
+      elementIncorreta.style.border = '3px solid red';
+      elementCorreta.style.border = '3px solid rgb(6, 240, 15)';
+    }
+  }
+
   renderAnswer = () => {
     const { stateApi } = this.props;
     const { index } = this.state;
@@ -38,11 +50,22 @@ class Game extends Component {
       <div key={ questions } data-testid="answer-options">
         {questions === stateApi.results[0].correct_answer
           ? (
-            <button type="button" data-testid="correct-answer">
+            <button
+              type="button"
+              id="correta"
+              data-testid="correct-answer"
+              onClick={ (e) => this.selectAnswer(e) }
+            >
               {stateApi.results[0].correct_answer}
             </button>)
           : (
-            <button type="button" data-testid={ `wrong-answer-${i}` }>
+            <button
+              type="button"
+              id="incorreta"
+              index={ i }
+              data-testid={ `wrong-answer-${i}` }
+              onClick={ (e) => this.selectAnswer(e) }
+            >
               {questions}
             </button>)}
       </div>
