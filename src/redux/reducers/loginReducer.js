@@ -1,4 +1,4 @@
-import { REQUEST_API, NOME_PEOPLE, EMAIL_PEOPLE } from '../action/action';
+import { REQUEST_API, LOGIN } from '../action/action';
 
 const INITIAL_STATE = {
   tokenReturn: '',
@@ -16,15 +16,13 @@ const loginReducer = (state = INITIAL_STATE, action) => {
       tokenReturn: action.data,
     };
 
-  case NOME_PEOPLE:
+  case LOGIN:
     return {
-      name: action.name,
+      ...state,
+      name: action.login.name,
+      Email: action.login.email,
     };
 
-  case EMAIL_PEOPLE:
-    return {
-      gravatarEmail: action.email,
-    };
   default:
     return state;
   }

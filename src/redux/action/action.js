@@ -1,20 +1,14 @@
 export const REQUEST_API = 'REQUEST_API';
-export const NOME_PEOPLE = 'NOME_PEOPLE';
-export const EMAIL_PEOPLE = 'EMAIL_PEOPLE';
+export const LOGIN = 'LOGIN';
 
 export const requestApi = (data) => ({
   type: REQUEST_API,
   data,
 });
 
-export const namePeople = (name) => ({
-  type: NOME_PEOPLE,
-  name,
-});
-
-export const emailPeople = (email) => ({
-  type: EMAIL_PEOPLE,
-  email,
+export const loginPeople = (login) => ({
+  type: LOGIN,
+  login,
 });
 
 export const getApiLogin = () => async (dispatch) => {

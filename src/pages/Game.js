@@ -10,54 +10,55 @@ class Game extends Component {
     getApi();
   }
 
-verificaUrlApi = () => {
+  /* verificaUrlApi = () => {
   const { stateApi } = this.props;
   if (stateApi.response_code !== 0) {
     return <Redirect to="/" />;
   }
 }
+ */
+  render() {
+    const { stateApi } = this.props;
 
-render() {
-  const { stateApi } = this.props;
-
-  return (
-    <header>
-      {!stateApi ? ('Carregando...') : this.verificaUrlApi() }
-      {stateApi.results ? (
-        <div>
-
-          <h1 data-testid="header-player-name">Nome da pessoa</h1>
-          <p data-testid="header-score">Placar: 0</p>
-          <img
-            data-testid="header-profile-picture"
-            src="https://www.gravatar.com/avatar/c19ad9dbaf91c5533605fbf985177ccc"
-            alt="gravatar"
-          />
-
+    return (
+      <header>
+        {stateApi.response_code === 0 ? ('Carregando...')
+          : console.log(stateApi.response_code) }
+        {stateApi.results.length > 0 ? (
           <div>
-            <p data-testid="question-category">{stateApi.results[0].category}</p>
-            <p data-testid="question-text">{stateApi.results[0].question}</p>
-            <div>
-              <button type="button" data-testid="correct-answer">
-                {stateApi.results[0].correct_answer}
-              </button>
-            </div>
-            {stateApi.results[0].incorrect_answers.map((question, index) => (
-              <div key={ question } data-testid="answer-options">
 
-                <button type="button" data-testid={ `wrong-answer-${index}` }>
-                  {question}
+            <h1 data-testid="header-player-name">Nome da pessoa</h1>
+            <p data-testid="header-score">Placar: 0</p>
+            <img
+              data-testid="header-profile-picture"
+              src="https://www.gravatar.com/avatar/c19ad9dbaf91c5533605fbf985177ccc"
+              alt="gravatar"
+            />
+
+            <div>
+              <p data-testid="question-category">{stateApi.results[0].category}</p>
+              <p data-testid="question-text">{stateApi.results[0].question}</p>
+              <div>
+                <button type="button" data-testid="correct-answer">
+                  {stateApi.results[0].correct_answer}
                 </button>
               </div>
-            ))}
+              {stateApi.results[0].incorrect_answers.map((question, index) => (
+                <div key={ question } data-testid="answer-options">
+
+                  <button type="button" data-testid={ `wrong-answer-${index}` }>
+                    {question}
+                  </button>
+                </div>
+              ))}
+
+            </div>
 
           </div>
-
-        </div>
-      ) : null}
-    </header>
-  );
-}
+        ) : <Redirect to="/" />}
+      </header>
+    );
+  }
 }
 
 const mapDispatchToProps = (dispatch) => ({
