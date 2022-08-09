@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getApiLogin } from '../redux/action/action';
+import { getApiLogin, loginPeople } from '../redux/action/action';
 
 class Login extends Component {
     state={
@@ -16,14 +16,17 @@ class Login extends Component {
 
     verificaInput = () => {
       const { name, email } = this.state;
+
       if (name && email) {
         return false;
       } return true;
     }
 
-    handleGame = () => {
+    handleGame = async () => {
       const { getApi, history } = this.props;
-      getApi();
+      await getApi();
+      const { login } = this.props;
+      await login(this.state);
       history.push('/game');
     }
 
@@ -34,6 +37,7 @@ class Login extends Component {
 
     render() {
       const { name, email } = this.state;
+
       return (
         <div>
           <label htmlFor="name">
@@ -80,10 +84,12 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getApi: () => dispatch(getApiLogin()),
+  login: (name) => dispatch(loginPeople(name)),
 });
 
 Login.propTypes = {
   getApi: PropTypes.func,
+  login: PropTypes.func,
 }.isRequired;
 
 export default connect(null, mapDispatchToProps)(Login);
