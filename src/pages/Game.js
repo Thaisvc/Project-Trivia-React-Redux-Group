@@ -9,11 +9,14 @@ class Game extends Component {
     super();
     this.state = {
       index: 0,
+      buttonQuest: false,
     };
   }
 
   componentDidMount() {
-    const duration = 60 * 0.50; // Converter para segundos
+    const convertMin = 60;
+    const Seconds = 0.50;
+    const duration = convertMin * Seconds; // Converter para segundos
     const display = document.querySelector('#timer'); // selecionando o timer
     this.startTimer(duration, display); // iniciando o timer
     const { getApi } = this.props;
@@ -28,7 +31,7 @@ class Game extends Component {
 
   renderAnswer = () => {
     const { stateApi } = this.props;
-    const { index } = this.state;
+    const { index, buttonQuest } = this.state;
 
     const LENGTH_INCORRECT = stateApi.results[index].incorrect_answers.length;
     const numRandom = (Math.random() * LENGTH_INCORRECT).toFixed(0);
@@ -41,16 +44,27 @@ class Game extends Component {
       <div key={ questions } data-testid="answer-options">
         {questions === stateApi.results[0].correct_answer
           ? (
-            <button type="button" data-testid="correct-answer">
+
+            <button
+              type="button"
+              disabled={ buttonQuest }
+              data-testid="correct-answer"
+            >
               {stateApi.results[0].correct_answer}
             </button>)
           : (
-            <button type="button" data-testid={ `wrong-answer-${i}` }>
+            <button
+              type="button"
+              disabled={ buttonQuest }
+              data-testid={ `wrong-answer-${i}` }
+            >
               {questions}
             </button>)}
       </div>
     ));
   }
+
+  // https://www.horadecodar.com.br/2020/12/14/contador-regressivo-com-javascript-puro/
 
    startTimer = (duration, display) => {
      let timer = duration; let seconds;
@@ -58,13 +72,14 @@ class Game extends Component {
      const sec = 10;
      const total = 1000;
      setInterval(() => {
-       // minutes = parseInt(timer / 60, 10);
        seconds = parseInt(timer % min, 10);
-       // minutes = minutes < 10 ? `0${minutes}` : minutes;
        seconds = seconds < sec ? `0${seconds}` : seconds;
        display.textContent = `${seconds}`;
+
        if (--timer < 0) {
          timer = duration;
+       } else if (timer === 0) {
+         this.setState({ buttonQuest: true });
        }
      }, total);
    }
