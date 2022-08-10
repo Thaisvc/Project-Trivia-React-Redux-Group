@@ -14,7 +14,7 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    this.startTimer(); // iniciando o timer
+    this.startTimer();
     const { getApi } = this.props;
     const tokenLocalStorage = localStorage.getItem('token');
     getApi(tokenLocalStorage);
