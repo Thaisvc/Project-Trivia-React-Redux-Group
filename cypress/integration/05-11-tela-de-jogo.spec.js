@@ -22,7 +22,7 @@ const FEEDBACK_TEXT_SELECTOR = '[data-testid="feedback-text"]';
 const PLAYER_NAME = 'Nome da pessoa';
 const PLAYER_EMAIL = 'email@pessoa.com';
 
-describe.skip('5 - [TELA DE JOGO] Crie um _header_ que deve conter as informações da pessoa jogadora', () => {
+describe('5 - [TELA DE JOGO] Crie um _header_ que deve conter as informações da pessoa jogadora', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000/', {
       onBeforeLoad(win) {
@@ -49,7 +49,7 @@ describe.skip('5 - [TELA DE JOGO] Crie um _header_ que deve conter as informaç�
   });
 });
 
-describe.skip('6 - [TELA DE JOGO] Crie a página de jogo que deve conter as informações relacionadas à pergunta', () => {
+describe('6 - [TELA DE JOGO] Crie a página de jogo que deve conter as informações relacionadas à pergunta', () => {
   const loadQuestionsPage = () => {
     cy.visit('http://localhost:3000/', {
       onBeforeLoad(win) {
@@ -115,7 +115,7 @@ describe.skip('6 - [TELA DE JOGO] Crie a página de jogo que deve conter as info
   });
 });
 
-describe.skip('7 - [TELA DE JOGO] Desenvolva o estilo que, ao clicar em uma resposta, a correta deve ficar verde e as incorretas, vermelhas', () => {
+describe('7 - [TELA DE JOGO] Desenvolva o estilo que, ao clicar em uma resposta, a correta deve ficar verde e as incorretas, vermelhas', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000/', {
       onBeforeLoad(win) {
