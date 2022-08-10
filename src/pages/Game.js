@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { getApiLogin, requestApi } from '../redux/action/action';
 
 class Game extends Component {
@@ -10,6 +10,9 @@ class Game extends Component {
     this.state = {
       index: 0,
       buttonQuest: false,
+      showElement: false,
+      showElementHome: false,
+      next: 1,
     };
   }
 
@@ -34,6 +37,9 @@ class Game extends Component {
       element.style.border = '3px solid red';
     });
     // elementsIncorreta.style.border = '3px solid red';
+    this.setState({
+      showElement: true,
+    });
   }
 
   renderAnswer = () => {
@@ -99,8 +105,25 @@ class Game extends Component {
      }, total);
    }
 
+   nextAnswerIndex = () => {
+     const { stateApi } = this.props;
+     const { index, next } = this.state;
+     console.log('next', next, index);
+     const six = 6;
+     const five = 5;
+     this.setState((stateAtual) => ({
+       index: (stateAtual.index + 1) % stateApi.results.length,
+       next: (stateAtual.next + 1) % six,
+     }));
+     if (next === five) {
+       this.setState({
+         showElementHome: true,
+       });
+     }
+   }
+
    render() {
-     const { index } = this.state;
+     const { index, showElement, showElementHome } = this.state;
      const { stateApi } = this.props;
      const ERROR_API = 3;
      if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
@@ -134,6 +157,29 @@ class Game extends Component {
               {stateApi.results && this.renderAnswer()}
               <div id="timer" />
             </div>
+
+            {showElement ? (
+              <button
+                type="button"
+                data-testid="btn-next"
+                onClick={ this.nextAnswerIndex }
+              >
+                Next
+
+              </button>
+            ) : null }
+
+            {showElementHome ? (
+              <Link to="/">
+                <button
+                  type="button"
+                  data-testid="btn-next"
+                >
+                  home
+
+                </button>
+              </Link>
+            ) : null }
           </div>
         )}
        </header>
