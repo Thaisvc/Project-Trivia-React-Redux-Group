@@ -14,11 +14,7 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    const convertMin = 60;
-    const Seconds = 0.50;
-    const duration = convertMin * Seconds; // Converter para segundos
-    const display = document.querySelector('#timer'); // selecionando o timer
-    this.startTimer(duration, display); // iniciando o timer
+    this.startTimer(); // iniciando o timer
     const { getApi } = this.props;
     const tokenLocalStorage = localStorage.getItem('token');
     getApi(tokenLocalStorage);
@@ -66,7 +62,11 @@ class Game extends Component {
 
   // https://www.horadecodar.com.br/2020/12/14/contador-regressivo-com-javascript-puro/
 
-   startTimer = (duration, display) => {
+   startTimer = () => {
+     const display = document.querySelector('#timer');
+     const convertMin = 60;
+     const Seconds = 0.50;
+     const duration = convertMin * Seconds;
      let timer = duration; let seconds;
      const min = 60;
      const sec = 10;
@@ -75,8 +75,9 @@ class Game extends Component {
        seconds = parseInt(timer % min, 10);
        seconds = seconds < sec ? `0${seconds}` : seconds;
        display.textContent = `${seconds}`;
+       timer -= 1;
 
-       if (--timer < 0) {
+       if (timer < 0) {
          timer = duration;
        } else if (timer === 0) {
          this.setState({ buttonQuest: true });
