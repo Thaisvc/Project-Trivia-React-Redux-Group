@@ -25,16 +25,15 @@ class Game extends Component {
     delApi({ response_code: 0 });
   }
 
-  selectAnswer= ({ target }) => {
+  selectAnswer= () => {
     const elementCorreta = document.getElementById('correta');
-    const elementIncorreta = document.getElementById('incorreta');
-    if (target.id === 'correta') {
-      elementCorreta.style.border = '3px solid rgb(6, 240, 15)';
-      elementIncorreta.style.border = '3px solid red';
-    } else {
-      elementIncorreta.style.border = '3px solid red';
-      elementCorreta.style.border = '3px solid rgb(6, 240, 15)';
-    }
+    const elementsIncorreta = document.querySelectorAll('.incorreta');
+
+    elementCorreta.style.border = '3px solid rgb(6, 240, 15)';
+    elementsIncorreta.forEach((element) => {
+      element.style.border = '3px solid red';
+    });
+    // elementsIncorreta.style.border = '3px solid red';
   }
 
   renderAnswer = () => {
@@ -65,7 +64,7 @@ class Game extends Component {
           : (
             <button
               type="button"
-              id="incorreta"
+              className="incorreta"
               disabled={ buttonQuest }
               data-testid={ `wrong-answer-${i}` }
               onClick={ (e) => this.selectAnswer(e) }
