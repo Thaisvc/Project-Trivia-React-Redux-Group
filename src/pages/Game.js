@@ -14,7 +14,7 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    this.startTimer(); // iniciando o timer
+    this.startTimer();
     const { getApi } = this.props;
     const tokenLocalStorage = localStorage.getItem('token');
     getApi(tokenLocalStorage);
@@ -23,6 +23,18 @@ class Game extends Component {
   componentWillUnmount() {
     const { delApi } = this.props;
     delApi({ response_code: 0 });
+  }
+
+  selectAnswer= ({ target }) => {
+    const elementCorreta = document.getElementById('correta');
+    const elementIncorreta = document.getElementById('incorreta');
+    if (target.id === 'correta') {
+      elementCorreta.style.border = '3px solid rgb(6, 240, 15)';
+      elementIncorreta.style.border = '3px solid red';
+    } else {
+      elementIncorreta.style.border = '3px solid red';
+      elementCorreta.style.border = '3px solid rgb(6, 240, 15)';
+    }
   }
 
   renderAnswer = () => {
@@ -43,16 +55,20 @@ class Game extends Component {
 
             <button
               type="button"
+              id="correta"
               disabled={ buttonQuest }
               data-testid="correct-answer"
+              onClick={ (e) => this.selectAnswer(e) }
             >
               {stateApi.results[0].correct_answer}
             </button>)
           : (
             <button
               type="button"
+              id="incorreta"
               disabled={ buttonQuest }
               data-testid={ `wrong-answer-${i}` }
+              onClick={ (e) => this.selectAnswer(e) }
             >
               {questions}
             </button>)}
