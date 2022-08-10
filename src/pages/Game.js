@@ -61,7 +61,6 @@ class Game extends Component {
   }
 
   // https://www.horadecodar.com.br/2020/12/14/contador-regressivo-com-javascript-puro/
-
    startTimer = () => {
      const display = document.querySelector('#timer');
      const convertMin = 60;
