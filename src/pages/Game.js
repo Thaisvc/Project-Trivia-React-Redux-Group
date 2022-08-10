@@ -9,10 +9,12 @@ class Game extends Component {
     super();
     this.state = {
       index: 0,
+      buttonQuest: false,
     };
   }
 
   componentDidMount() {
+    this.startTimer();
     const { getApi } = this.props;
     const tokenLocalStorage = localStorage.getItem('token');
     getApi(tokenLocalStorage);
@@ -37,7 +39,7 @@ class Game extends Component {
 
   renderAnswer = () => {
     const { stateApi } = this.props;
-    const { index } = this.state;
+    const { index, buttonQuest } = this.state;
 
     const LENGTH_INCORRECT = stateApi.results[index].incorrect_answers.length;
     const numRandom = (Math.random() * LENGTH_INCORRECT).toFixed(0);
@@ -50,9 +52,11 @@ class Game extends Component {
       <div key={ questions } data-testid="answer-options">
         {questions === stateApi.results[0].correct_answer
           ? (
+
             <button
               type="button"
               id="correta"
+              disabled={ buttonQuest }
               data-testid="correct-answer"
               onClick={ (e) => this.selectAnswer(e) }
             >
@@ -62,7 +66,7 @@ class Game extends Component {
             <button
               type="button"
               id="incorreta"
-              index={ i }
+              disabled={ buttonQuest }
               data-testid={ `wrong-answer-${i}` }
               onClick={ (e) => this.selectAnswer(e) }
             >
@@ -72,14 +76,38 @@ class Game extends Component {
     ));
   }
 
-  render() {
-    const { index } = this.state;
-    const { stateApi } = this.props;
-    const ERROR_API = 3;
-    if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
-    return (
-      <header>
-        {stateApi
+  // https://www.horadecodar.com.br/2020/12/14/contador-regressivo-com-javascript-puro/
+   startTimer = () => {
+     const display = document.querySelector('#timer');
+     const convertMin = 60;
+     const Seconds = 0.50;
+     const duration = convertMin * Seconds;
+     let timer = duration; let seconds;
+     const min = 60;
+     const sec = 10;
+     const total = 1000;
+     setInterval(() => {
+       seconds = parseInt(timer % min, 10);
+       seconds = seconds < sec ? `0${seconds}` : seconds;
+       display.textContent = `${seconds}`;
+       timer -= 1;
+
+       if (timer < 0) {
+         timer = duration;
+       } else if (timer === 0) {
+         this.setState({ buttonQuest: true });
+       }
+     }, total);
+   }
+
+   render() {
+     const { index } = this.state;
+     const { stateApi } = this.props;
+     const ERROR_API = 3;
+     if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
+     return (
+       <header>
+         {stateApi
         && (
           <div>
             <h1 data-testid="header-player-name">Nome da pessoa</h1>
@@ -105,13 +133,13 @@ class Game extends Component {
 
               <div />
               {stateApi.results && this.renderAnswer()}
-
+              <div id="timer" />
             </div>
           </div>
         )}
-      </header>
-    );
-  }
+       </header>
+     );
+   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
