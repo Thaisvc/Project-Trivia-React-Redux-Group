@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
-import { getApiLogin, requestApi } from '../redux/action/action';
+import { addScore, getApiLogin, requestApi } from '../redux/action/action';
 
 class Game extends Component {
   constructor() {
@@ -21,6 +21,7 @@ class Game extends Component {
     const { getApi } = this.props;
     const tokenLocalStorage = localStorage.getItem('token');
     getApi(tokenLocalStorage);
+    this.punctuation();
   }
 
   componentWillUnmount() {
@@ -55,7 +56,7 @@ class Game extends Component {
 
     return answer.map((questions, i) => (
       <div key={ questions } data-testid="answer-options">
-        {questions === stateApi.results[0].correct_answer
+        {questions === stateApi.results[index].correct_answer
           ? (
 
             <button
@@ -83,6 +84,7 @@ class Game extends Component {
 
   // https://www.horadecodar.com.br/2020/12/14/contador-regressivo-com-javascript-puro/
    startTimer = () => {
+     const { setScore } = this.props;
      const display = document.querySelector('#timer');
      const convertMin = 60;
      const Seconds = 0.50;
@@ -91,14 +93,14 @@ class Game extends Component {
      const min = 60;
      const sec = 10;
      const total = 1000;
-     setInterval(() => {
+     const reset = setInterval(() => {
        seconds = parseInt(timer % min, 10);
        seconds = seconds < sec ? `0${seconds}` : seconds;
        display.textContent = `${seconds}`;
        timer -= 1;
-
+       // setScore(timer);
        if (timer < 0) {
-         timer = duration;
+         clearInterval(reset);
        } else if (timer === 0) {
          this.setState({ buttonQuest: true });
        }
@@ -120,6 +122,12 @@ class Game extends Component {
          showElementHome: true,
        });
      }
+   }
+
+   punctuation = () => {
+     /* const { getScore } = this.props;
+     console.log('getScore', getScore); */
+     // onst calc = 10 +
    }
 
    render() {
@@ -190,10 +198,12 @@ class Game extends Component {
 const mapDispatchToProps = (dispatch) => ({
   getApi: (payload) => dispatch(getApiLogin(payload)),
   delApi: (obj) => dispatch(requestApi(obj)),
+  setScore: (score) => dispatch(addScore(score)),
 });
 
 const mapStateToProps = (state) => ({
   stateApi: state.loginReducer.tokenReturn,
+  getScore: state.loginReducer.score,
 });
 
 Game.propTypes = {

@@ -1,4 +1,4 @@
-import { REQUEST_API, LOGIN } from '../action/action';
+import { REQUEST_API, LOGIN, SCORE } from '../action/action';
 
 const INITIAL_STATE = {
   tokenReturn: {},
@@ -23,6 +23,11 @@ const loginReducer = (state = INITIAL_STATE, action) => {
       ...state,
       name: action.login.name,
       Email: action.login.email,
+    };
+  case SCORE:
+    return {
+      ...state,
+      score: action.payload,
     };
 
   default:
