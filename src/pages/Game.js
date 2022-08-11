@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
-import { /* addScore */ getApiLogin /* requestApi */ } from '../redux/action/action';
+import { addScore, getApiLogin } from '../redux/action/action';
 
 class Game extends Component {
   constructor() {
@@ -16,6 +16,7 @@ class Game extends Component {
       resete: '',
       renderizaAnswer: [],
       respostas: false,
+      scoreTimer: 30,
     };
   }
 
@@ -27,11 +28,6 @@ class Game extends Component {
     this.punctuation();
   }
 
-  /*  componentWillUnmount() {
-    const { delApi } = this.props;
-    delApi({ response_code: 0 });
-  }
- */
   selectAnswer= () => {
     const elementCorreta = document.getElementById('correta');
     const elementsIncorreta = document.querySelectorAll('.incorreta');
@@ -52,9 +48,24 @@ class Game extends Component {
     clearInterval(resete);
   }
 
+  scoreFunction = () => {
+    const POINT = 10;
+    const POINT_HARD = 3;
+    const { scoreTimer, index } = this.state;
+    const { stateApi, setScore } = this.props;
+    const difficultys = stateApi.results[index].difficulty;
+    if (difficultys === 'easy') setScore(Number(POINT + (scoreTimer * 1)));
+    if (difficultys === 'medium') setScore(Number(POINT + (scoreTimer * 2)));
+    if (difficultys === 'hard') setScore(Number(POINT + (scoreTimer * POINT_HARD)));
+  }
+
+  correctAnswerScore = () => {
+    this.stopTime();
+    this.scoreFunction();
+  }
+
   renderAnswer = () => {
     const { stateApi } = this.props;
-    console.log(stateApi);
     const arrTotal = [];
     stateApi.results.forEach((question) => {
       const LENGTH_INCORRECT = question.incorrect_answers.length;
@@ -63,13 +74,10 @@ class Game extends Component {
       answer.splice(numRandom, 0, question.correct_answer);
       arrTotal.push(answer);
     });
-    console.log('ENTREI NA FUNÇÃO renderAnswer');
     this.setState({ renderizaAnswer: arrTotal, respostas: true });
   }
 
-  // https://www.horadecodar.com.br/2020/12/14/contador-regressivo-com-javascript-puro/
    startTimer = () => {
-     //  const { setScore } = this.props;
      const display = document.querySelector('#timer');
      const convertMin = 60;
      const Seconds = 0.50;
@@ -83,9 +91,10 @@ class Game extends Component {
        seconds = seconds < sec ? `0${seconds}` : seconds;
        display.textContent = `${seconds}`;
        timer -= 1;
-
+       this.setState({ scoreTimer: timer + 1 });
        if (timer === 0) {
          this.setState({ buttonQuest: true });
+         clearInterval(reset);
        }
      }, total);
      this.setState({ resete: reset });
@@ -93,8 +102,7 @@ class Game extends Component {
 
    nextAnswerIndex = () => {
      const { stateApi } = this.props;
-     const { index, next } = this.state;
-     console.log('next', next, index);
+     const { next } = this.state;
      const six = 6;
      const five = 5;
      this.setState((stateAtual) => ({
@@ -119,7 +127,7 @@ class Game extends Component {
      const { index, showElement, showElementHome, respostas,
        renderizaAnswer, buttonQuest } = this.state;
 
-     const { stateApi } = this.props;
+     const { stateApi, getScore } = this.props;
 
      const ERROR_API = 3;
      if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
@@ -129,7 +137,7 @@ class Game extends Component {
         && (
           <div>
             <h1 data-testid="header-player-name">Nome da pessoa</h1>
-            <p data-testid="header-score">Placar: 0</p>
+            <p data-testid="header-score">{`Placar: ${getScore}`}</p>
             <img
               data-testid="header-profile-picture"
               src="https://www.gravatar.com/avatar/c19ad9dbaf91c5533605fbf985177ccc"
@@ -163,7 +171,7 @@ class Game extends Component {
                           id="correta"
                           disabled={ buttonQuest }
                           data-testid="correct-answer"
-                          onClick={ this.stopTime }
+                          onClick={ this.correctAnswerScore }
                         >
                           {answer}
                         </button>)
@@ -215,13 +223,12 @@ class Game extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getApi: (payload) => dispatch(getApiLogin(payload)),
-  // delApi: (obj) => dispatch(requestApi(obj)),
-  // setScore: (score) => dispatch(addScore(score)),
+  setScore: (score) => dispatch(addScore(score)),
 });
 
 const mapStateToProps = (state) => ({
   stateApi: state.loginReducer.tokenReturn,
-  // getScore: state.loginReducer.score,
+  getScore: state.loginReducer.score,
 });
 
 Game.propTypes = {

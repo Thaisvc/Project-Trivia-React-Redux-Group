@@ -5,7 +5,7 @@ const INITIAL_STATE = {
 
   name: '',
   assertions: '',
-  score: '',
+  score: 0,
   gravatarEmail: '',
 
 };
@@ -27,7 +27,7 @@ const loginReducer = (state = INITIAL_STATE, action) => {
   case SCORE:
     return {
       ...state,
-      score: action.payload,
+      score: state.score + action.payload,
     };
 
   default:
