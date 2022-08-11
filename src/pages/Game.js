@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
-import { addScore, getApiLogin, requestApi } from '../redux/action/action';
+import { /* addScore */ getApiLogin /* requestApi */ } from '../redux/action/action';
 
 class Game extends Component {
   constructor() {
@@ -14,8 +14,8 @@ class Game extends Component {
       showElementHome: false,
       next: 1,
       resete: '',
-      /*  scoreStop: '',
-      tempe: 0, */
+      renderizaAnswer: [],
+      respostas: false,
     };
   }
 
@@ -27,11 +27,11 @@ class Game extends Component {
     this.punctuation();
   }
 
-  componentWillUnmount() {
+  /*  componentWillUnmount() {
     const { delApi } = this.props;
     delApi({ response_code: 0 });
   }
-
+ */
   selectAnswer= () => {
     const elementCorreta = document.getElementById('correta');
     const elementsIncorreta = document.querySelectorAll('.incorreta');
@@ -54,46 +54,22 @@ class Game extends Component {
 
   renderAnswer = () => {
     const { stateApi } = this.props;
-    const { index, buttonQuest } = this.state;
-
-    const LENGTH_INCORRECT = stateApi.results[index].incorrect_answers.length;
-    const numRandom = (Math.random() * LENGTH_INCORRECT).toFixed(0);
-    console.log(stateApi.results[index].correct_answer, '<= RESPOSTA CORRETA');
-
-    const answer = [...stateApi.results[index].incorrect_answers];
-    answer.splice(numRandom, 0, stateApi.results[index].correct_answer);
-
-    return answer.map((questions, i) => (
-      <div key={ questions } data-testid="answer-options">
-        {questions === stateApi.results[index].correct_answer
-          ? (
-
-            <button
-              type="button"
-              id="correta"
-              disabled={ buttonQuest }
-              data-testid="correct-answer"
-              onClick={ this.stopTime }
-            >
-              {stateApi.results[0].correct_answer}
-            </button>)
-          : (
-            <button
-              type="button"
-              className="incorreta"
-              disabled={ buttonQuest }
-              data-testid={ `wrong-answer-${i}` }
-              onClick={ this.stopTime }
-            >
-              {questions}
-            </button>)}
-      </div>
-    ));
+    console.log(stateApi);
+    const arrTotal = [];
+    stateApi.results.forEach((question) => {
+      const LENGTH_INCORRECT = question.incorrect_answers.length;
+      const numRandom = (Math.random() * LENGTH_INCORRECT).toFixed(0);
+      const answer = [...question.incorrect_answers];
+      answer.splice(numRandom, 0, question.correct_answer);
+      arrTotal.push(answer);
+    });
+    console.log('ENTREI NA FUNÇÃO renderAnswer');
+    this.setState({ renderizaAnswer: arrTotal, respostas: true });
   }
 
   // https://www.horadecodar.com.br/2020/12/14/contador-regressivo-com-javascript-puro/
    startTimer = () => {
-   //  const { setScore } = this.props;
+     //  const { setScore } = this.props;
      const display = document.querySelector('#timer');
      const convertMin = 60;
      const Seconds = 0.50;
@@ -107,7 +83,6 @@ class Game extends Component {
        seconds = seconds < sec ? `0${seconds}` : seconds;
        display.textContent = `${seconds}`;
        timer -= 1;
-       // setScore(timer);
 
        if (timer === 0) {
          this.setState({ buttonQuest: true });
@@ -141,7 +116,9 @@ class Game extends Component {
    }
 
    render() {
-     const { index, showElement, showElementHome } = this.state;
+     const { index, showElement, showElementHome, respostas,
+       renderizaAnswer, buttonQuest } = this.state;
+
      const { stateApi } = this.props;
 
      const ERROR_API = 3;
@@ -173,7 +150,37 @@ class Game extends Component {
                 : <p>Carregando</p>}
 
               <div />
-              {stateApi.results && this.renderAnswer()}
+
+              {!respostas && stateApi.results && this.renderAnswer()}
+              <div data-testid="answer-options">
+                {renderizaAnswer.length > 0
+                  && renderizaAnswer[index].map((answer, i) => (
+                    answer === stateApi.results[index].correct_answer
+                      ? (
+                        <button
+                          key={ answer }
+                          type="button"
+                          id="correta"
+                          disabled={ buttonQuest }
+                          data-testid="correct-answer"
+                          onClick={ this.stopTime }
+                        >
+                          {answer}
+                        </button>)
+                      : (
+                        <button
+                          key={ answer }
+                          type="button"
+                          className="incorreta"
+                          disabled={ buttonQuest }
+                          data-testid={ `wrong-answer-${i}` }
+                          onClick={ this.stopTime }
+                        >
+                          {answer}
+                        </button>)
+                  ))}
+              </div>
+
               <div id="timer" />
             </div>
 
@@ -208,13 +215,13 @@ class Game extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getApi: (payload) => dispatch(getApiLogin(payload)),
-  delApi: (obj) => dispatch(requestApi(obj)),
-  setScore: (score) => dispatch(addScore(score)),
+  // delApi: (obj) => dispatch(requestApi(obj)),
+  // setScore: (score) => dispatch(addScore(score)),
 });
 
 const mapStateToProps = (state) => ({
   stateApi: state.loginReducer.tokenReturn,
-  getScore: state.loginReducer.score,
+  // getScore: state.loginReducer.score,
 });
 
 Game.propTypes = {
