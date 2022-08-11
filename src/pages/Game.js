@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { addScore, getApiLogin } from '../redux/action/action';
+import { addScore, assertionsQuestions, getApiLogin } from '../redux/action/action';
 
 class Game extends Component {
   constructor() {
@@ -59,6 +59,8 @@ class Game extends Component {
   }
 
   correctAnswerScore = () => {
+    const { setAssertions } = this.props;
+    setAssertions(1);
     this.stopTime();
     this.scoreFunction();
   }
@@ -210,6 +212,7 @@ class Game extends Component {
 const mapDispatchToProps = (dispatch) => ({
   getApi: (payload) => dispatch(getApiLogin(payload)),
   setScore: (score) => dispatch(addScore(score)),
+  setAssertions: (assertions) => dispatch(assertionsQuestions(assertions)),
 });
 
 const mapStateToProps = (state) => ({

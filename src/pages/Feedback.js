@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 
 class Feedback extends Component {
   render() {
-    const { name, score } = this.props;
+    const { name, score, assertions } = this.props;
+    const tres = 3;
     return (
-      <div data-testid="feedback-text">
+      <div>
         <img
           data-testid="header-profile-picture"
           src="https://www.gravatar.com/avatar/c19ad9dbaf91c5533605fbf985177ccc"
@@ -16,7 +17,12 @@ class Feedback extends Component {
         <p data-testid="header-player-name">
           {name}
         </p>
+
         <p data-testid="header-score">{score}</p>
+
+        <p data-testid="feedback-text">
+          {assertions < tres ? 'Could be better...' : 'Well Done!' }
+        </p>
       </div>
     );
   }
@@ -25,6 +31,7 @@ class Feedback extends Component {
 const mapStateToProps = (state) => ({
   name: state.player.name,
   score: state.player.score,
+  assertions: state.player.assertions,
 });
 
 Feedback.propTypes = {
