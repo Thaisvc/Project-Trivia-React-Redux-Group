@@ -13,6 +13,9 @@ class Game extends Component {
       showElement: false,
       showElementHome: false,
       next: 1,
+      resete: '',
+      /*  scoreStop: '',
+      tempe: 0, */
     };
   }
 
@@ -43,6 +46,12 @@ class Game extends Component {
     });
   }
 
+  stopTime = () => {
+    const { resete } = this.state;
+    this.selectAnswer();
+    clearInterval(resete);
+  }
+
   renderAnswer = () => {
     const { stateApi } = this.props;
     const { index, buttonQuest } = this.state;
@@ -64,7 +73,7 @@ class Game extends Component {
               id="correta"
               disabled={ buttonQuest }
               data-testid="correct-answer"
-              onClick={ (e) => this.selectAnswer(e) }
+              onClick={ this.stopTime }
             >
               {stateApi.results[0].correct_answer}
             </button>)
@@ -74,7 +83,7 @@ class Game extends Component {
               className="incorreta"
               disabled={ buttonQuest }
               data-testid={ `wrong-answer-${i}` }
-              onClick={ (e) => this.selectAnswer(e) }
+              onClick={ this.stopTime }
             >
               {questions}
             </button>)}
@@ -84,7 +93,7 @@ class Game extends Component {
 
   // https://www.horadecodar.com.br/2020/12/14/contador-regressivo-com-javascript-puro/
    startTimer = () => {
-     const { setScore } = this.props;
+   //  const { setScore } = this.props;
      const display = document.querySelector('#timer');
      const convertMin = 60;
      const Seconds = 0.50;
@@ -99,12 +108,12 @@ class Game extends Component {
        display.textContent = `${seconds}`;
        timer -= 1;
        // setScore(timer);
-       if (timer < 0) {
-         clearInterval(reset);
-       } else if (timer === 0) {
+
+       if (timer === 0) {
          this.setState({ buttonQuest: true });
        }
      }, total);
+     this.setState({ resete: reset });
    }
 
    nextAnswerIndex = () => {
@@ -122,17 +131,19 @@ class Game extends Component {
          showElementHome: true,
        });
      }
+     this.startTimer();
    }
 
    punctuation = () => {
-     /* const { getScore } = this.props;
-     console.log('getScore', getScore); */
+     const { getScore } = this.props;
+     console.log('getScore', getScore);
      // onst calc = 10 +
    }
 
    render() {
      const { index, showElement, showElementHome } = this.state;
      const { stateApi } = this.props;
+
      const ERROR_API = 3;
      if (stateApi.response_code === ERROR_API) return <Redirect to="/" />;
      return (
