@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { addScore, getApiLogin } from '../redux/action/action';
 
 class Game extends Component {
@@ -25,7 +25,6 @@ class Game extends Component {
     const { getApi } = this.props;
     const tokenLocalStorage = localStorage.getItem('token');
     getApi(tokenLocalStorage);
-    this.punctuation();
   }
 
   selectAnswer= () => {
@@ -117,12 +116,6 @@ class Game extends Component {
      this.startTimer();
    }
 
-   punctuation = () => {
-     const { getScore } = this.props;
-     console.log('getScore', getScore);
-     // onst calc = 10 +
-   }
-
    render() {
      const { index, showElement, showElementHome, respostas,
        renderizaAnswer, buttonQuest } = this.state;
@@ -204,15 +197,8 @@ class Game extends Component {
             ) : null }
 
             {showElementHome ? (
-              <Link to="/">
-                <button
-                  type="button"
-                  data-testid="btn-next"
-                >
-                  home
+              <Redirect to="/feedback" />
 
-                </button>
-              </Link>
             ) : null }
           </div>
         )}
@@ -227,8 +213,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  stateApi: state.loginReducer.tokenReturn,
-  getScore: state.loginReducer.score,
+  stateApi: state.player.tokenReturn,
+  getScore: state.player.score,
 });
 
 Game.propTypes = {

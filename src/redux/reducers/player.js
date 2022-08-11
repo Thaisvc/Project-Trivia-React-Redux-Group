@@ -10,7 +10,7 @@ const INITIAL_STATE = {
 
 };
 
-const loginReducer = (state = INITIAL_STATE, action) => {
+const player = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case REQUEST_API:
     return {
@@ -35,4 +35,4 @@ const loginReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default loginReducer;
+export default player;
