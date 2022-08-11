@@ -1,16 +1,16 @@
-import { REQUEST_API, LOGIN } from '../action/action';
+import { REQUEST_API, LOGIN, SCORE } from '../action/action';
 
 const INITIAL_STATE = {
   tokenReturn: {},
 
   name: '',
   assertions: '',
-  score: '',
+  score: 0,
   gravatarEmail: '',
 
 };
 
-const loginReducer = (state = INITIAL_STATE, action) => {
+const player = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case REQUEST_API:
     return {
@@ -24,10 +24,15 @@ const loginReducer = (state = INITIAL_STATE, action) => {
       name: action.login.name,
       Email: action.login.email,
     };
+  case SCORE:
+    return {
+      ...state,
+      score: state.score + action.payload,
+    };
 
   default:
     return state;
   }
 };
 
-export default loginReducer;
+export default player;
