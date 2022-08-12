@@ -1,9 +1,25 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class Feedback extends Component {
+  linkToRanking=() => {
+    const { name, score, history } = this.props;
+    history.push('/ranking');
+
+    const picture = 'https://www.gravatar.com/avatar/c19ad9dbaf91c5533605fbf985177ccc';
+    const objPlayers = { name, score, picture };
+
+    const objLocalStorage = JSON.parse(localStorage.getItem('ranking')) || [];
+    if (typeof objLocalStorage === 'string') {
+      [objLocalStorage].push(objPlayers);
+      localStorage.setItem('ranking', JSON.stringify(objLocalStorage));
+    }
+    objLocalStorage.push(objPlayers);
+    localStorage.setItem('ranking', JSON.stringify(objLocalStorage));
+  }
+
   render() {
     const { name, score, assertions } = this.props;
     const tres = 3;
@@ -15,41 +31,46 @@ class Feedback extends Component {
           alt="gravatar"
         />
 
-        <p data-testid="header-player-name">
+        <h1 data-testid="header-player-name">
           {name}
-        </p>
+        </h1>
 
-        <p data-testid="header-score">{score}</p>
+        <h2 data-testid="header-score">{score}</h2>
 
-        <p data-testid="feedback-text">
+        <h3 data-testid="feedback-text">
           {assertions < tres ? 'Could be better...' : 'Well Done!' }
-        </p>
+        </h3>
 
         <p>
           Placar final:
+          {' '}
           <span data-testid="feedback-total-score">{ score }</span>
         </p>
 
         <p>
           Você acertou:
+          {' '}
           <span data-testid="feedback-total-question">
             {assertions}
           </span>
         </p>
-
         <Link to="/">
-          <button type="button" data-testid="btn-play-again">Play Again</button>
-        </Link>
-
-        <Link to="/ranking">
           <button
             type="button"
-            data-testid="btn-ranking"
+            data-testid="btn-play-again"
           >
-            Ranking
+            Play Again
           </button>
-
         </Link>
+
+        <button
+          type="button"
+          data-testid="btn-ranking"
+          onClick={ this.linkToRanking }
+        >
+          Ranking
+        </button>
+
       </div>
     );
   }

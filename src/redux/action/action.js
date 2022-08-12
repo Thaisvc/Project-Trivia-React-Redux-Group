@@ -2,6 +2,7 @@ export const REQUEST_API = 'REQUEST_API';
 export const LOGIN = 'LOGIN';
 export const SCORE = 'SCORE';
 export const ASSERTIONS = 'ASSERTIONS';
+export const ZERASCORE = 'ZERASCORE';
 
 export const requestApi = (data) => ({
   type: REQUEST_API,
@@ -15,6 +16,10 @@ export const loginPeople = (login) => ({
 
 export const addScore = (payload) => ({
   type: SCORE,
+  payload,
+});
+export const zeraScore = (payload) => ({
+  type: ZERASCORE,
   payload,
 });
 

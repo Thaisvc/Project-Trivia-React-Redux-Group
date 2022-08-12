@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { loginPeople } from '../redux/action/action';
+import logo from '../trivia.png';
+import { loginPeople, requestApi, zeraScore } from '../redux/action/action';
 
 class Login extends Component {
     state={
@@ -23,7 +24,8 @@ class Login extends Component {
     }
 
     handleGame = async () => {
-      const { login, history } = this.props;
+      const { login, history, zeraPlacar } = this.props;
+      zeraPlacar();
       const response = await fetch('https://opentdb.com/api_token.php?command=request');
       const data = await response.json();
       localStorage.setItem('token', data.token);
@@ -33,6 +35,8 @@ class Login extends Component {
     }
 
     btnSetting = () => {
+      const { delApi } = this.props;
+      delApi([]);
       const { history } = this.props;
       history.push('/settings');
     }
@@ -79,6 +83,12 @@ class Login extends Component {
           >
             Settings
           </button>
+          <br />
+          <br />
+          <br />
+          <div>
+            <img src={ logo } className="App-logo" alt="logo" width="300px" />
+          </div>
         </div>
       );
     }
@@ -86,6 +96,8 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   login: (name) => dispatch(loginPeople(name)),
+  delApi: (payload) => dispatch(requestApi(payload)),
+  zeraPlacar: () => dispatch(zeraScore()),
 });
 
 Login.propTypes = {
