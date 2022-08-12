@@ -1,4 +1,4 @@
-import { REQUEST_API, LOGIN, SCORE, ASSERTIONS } from '../action/action';
+import { REQUEST_API, LOGIN, SCORE, ASSERTIONS, ZERASCORE } from '../action/action';
 
 const INITIAL_STATE = {
   tokenReturn: {},
@@ -28,6 +28,11 @@ const player = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       score: state.score + action.payload,
+    };
+  case ZERASCORE:
+    return {
+      ...state,
+      score: 0,
     };
 
   case ASSERTIONS:

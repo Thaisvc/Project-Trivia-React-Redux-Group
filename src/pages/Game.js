@@ -15,16 +15,16 @@ class Game extends Component {
       next: 1,
       resete: '',
       renderizaAnswer: [],
-      respostas: false,
       scoreTimer: 30,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.startTimer();
     const { getApi } = this.props;
     const tokenLocalStorage = localStorage.getItem('token');
-    getApi(tokenLocalStorage);
+    await getApi(tokenLocalStorage);
+    this.renderAnswer();
   }
 
   selectAnswer= () => {
@@ -32,18 +32,19 @@ class Game extends Component {
     const elementsIncorreta = document.querySelectorAll('.incorreta');
 
     elementCorreta.style.border = '3px solid rgb(6, 240, 15)';
+
     elementsIncorreta.forEach((element) => {
       element.style.border = '3px solid red';
     });
-    // elementsIncorreta.style.border = '3px solid red';
+
     this.setState({
       showElement: true,
     });
   }
 
   stopTime = () => {
-    const { resete } = this.state;
     this.selectAnswer();
+    const { resete } = this.state;
     clearInterval(resete);
   }
 
@@ -75,7 +76,9 @@ class Game extends Component {
       answer.splice(numRandom, 0, question.correct_answer);
       arrTotal.push(answer);
     });
-    this.setState({ renderizaAnswer: arrTotal, respostas: true });
+    this.setState({ renderizaAnswer: arrTotal,
+      // respostas: true,
+    });
   }
 
    startTimer = () => {
@@ -119,7 +122,7 @@ class Game extends Component {
    }
 
    render() {
-     const { index, showElement, showElementHome, respostas,
+     const { index, showElement, showElementHome,
        renderizaAnswer, buttonQuest } = this.state;
 
      const { stateApi, getScore } = this.props;
@@ -153,8 +156,6 @@ class Game extends Component {
                 : <p>Carregando</p>}
 
               <div />
-
-              {!respostas && stateApi.results && this.renderAnswer()}
               <div data-testid="answer-options">
                 {renderizaAnswer.length > 0
                   && renderizaAnswer[index].map((answer, i) => (
@@ -169,7 +170,8 @@ class Game extends Component {
                           onClick={ this.correctAnswerScore }
                         >
                           {answer}
-                        </button>)
+                        </button>
+                      )
                       : (
                         <button
                           key={ answer }
@@ -180,7 +182,9 @@ class Game extends Component {
                           onClick={ this.stopTime }
                         >
                           {answer}
-                        </button>)
+                        </button>
+                      )
+
                   ))}
               </div>
 
@@ -198,10 +202,7 @@ class Game extends Component {
               </button>
             ) : null }
 
-            {showElementHome ? (
-              <Redirect to="/feedback" />
-
-            ) : null }
+            {showElementHome && <Redirect to="/feedback" />}
           </div>
         )}
        </header>
