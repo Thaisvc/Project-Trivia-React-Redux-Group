@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 class Feedback extends Component {
   render() {
@@ -40,7 +39,7 @@ class Feedback extends Component {
 
         <Link to="/">
           <button type="button" data-testid="btn-play-again">Play Again</button>
-
+        </Link>
 
         <Link to="/ranking">
           <button
