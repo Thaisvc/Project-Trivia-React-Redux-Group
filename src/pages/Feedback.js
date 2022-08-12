@@ -23,6 +23,18 @@ class Feedback extends Component {
         <p data-testid="feedback-text">
           {assertions < tres ? 'Could be better...' : 'Well Done!' }
         </p>
+
+        <p>
+          Placar final:
+          <span data-testid="feedback-total-score">{ score }</span>
+        </p>
+
+        <p>
+          Você acertou:
+          <span data-testid="feedback-total-question">
+            {assertions}
+          </span>
+        </p>
       </div>
     );
   }
@@ -37,6 +49,7 @@ const mapStateToProps = (state) => ({
 Feedback.propTypes = {
   name: PropTypes.string,
   score: PropTypes.number,
+  assertions: PropTypes.number,
 }.isRequired;
 
 export default connect(mapStateToProps)(Feedback);
