@@ -1,6 +1,7 @@
 export const REQUEST_API = 'REQUEST_API';
 export const LOGIN = 'LOGIN';
 export const SCORE = 'SCORE';
+export const ASSERTIONS = 'ASSERTIONS';
 
 export const requestApi = (data) => ({
   type: REQUEST_API,
@@ -30,3 +31,8 @@ export const getApiLogin = (token) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const assertionsQuestions = (data) => ({
+  type: ASSERTIONS,
+  data,
+});
